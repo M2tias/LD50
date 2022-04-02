@@ -1,0 +1,90 @@
+
+Todo:
+  ☐ Enable terrain collider for possible raycasts
+    ☐ Set physics layers correctly for it
+  ☐ Object pools
+    ☐ one for each enemy type?
+    ☐ generic for loot
+  ☐ Enemy
+    ☐ Enemy movement logic
+      ☐ Probe
+        ✔ Cycle @done(22-04-02 18:46)
+          ☐ Rotate around 5s
+          ☐ Lock rotation towards player 2s
+            ☐ Infinite range
+          ☐ Move towards player
+            ☐ Infinite range, 10s
+            ☐ Within X range, infinite time
+            ☐ 75% player starting movespeed?
+          ☐ Restart cycle if distance has been X for 10 seconds
+      ☐ Fighter
+        ☐ Cycle
+          ☐ Move to a random place in X units
+            ☐ Random Vec2 and raycast from top towards the terrain
+            ☐ Check distance and angle to player
+            ☐ If player is not within Y distance and Z degree angle, restart cycle
+          ☐ Move towards position in front of player
+            ☐ Faster than probe, not as fast as player?
+          ☐ Shoot player if in range 
+    ☐ Enemy spawning
+      ☐ Spawn different amount of different units based on tier
+        ☐ Spawn close to player, range from player based on tier
+      ☐ Tiers
+        ☐ 1st tier
+          ☐ Only probes, 1 every X seconds
+        ☐ 2nd tier
+          ☐ Only probes, 3 every X seconds
+        ☐ 3rd tier
+          ☐ 3 probes, 1 fighter, every X seconds
+        ☐ 4th tier
+          ☐ 
+    ☐ Enemy attacks
+      ☐ Probe
+        ☐ Short range AOE, if it triggers, it damages
+      ☐ Fighter
+    ☐ Death
+      ☐ Back to pool
+      ☐ Drop something maybe
+    ☐ Balance enemies
+      ☐ Probe is easiest?
+      ☐ Fighter tier 2?
+    ☐ Enemy models
+      ✔ Probe @done(22-04-02 16:46)
+      ✔ Fighter @done(22-04-02 19:02)
+  ☐ Player
+    ☐ Tweak movement
+    ☐ Shooting
+      ☐ Kill enemies
+    ☐ HP
+  ☐ Loot
+    ☐ Pick loot
+    ☐ Spawn loot
+    ☐ Design loot graphics
+    ☐ Design loot mechanics
+      ☐ Attack speed
+      ☐ Projectile speed (might break bullet movement)
+      ☐ Movement speed
+      ☐ Crit?
+      ☐ Damage?
+      ☐ AOE damage around player?
+      ☐ Lifesteal?
+      ☐ Damage reflection?
+    ☐ Models
+  ☐ Level design
+  ☐ Materials / textures
+    ☐ Player materials
+    ☐ Enemies
+      ☐ Probe
+    ☐ Loot
+  ☐ Score?
+  ☐ UI
+    ☐ Show HP
+    ☐ Show time
+    ☐ Show score?
+    ☐ Show picked loot
+  ☐ Visuals
+    ☐ Show damage on hit
+    ☐ Show effect on hit
+      ☐ Enemy?
+      ☐ Player flashes on hit?
+    
