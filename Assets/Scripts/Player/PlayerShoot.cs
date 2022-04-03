@@ -6,16 +6,15 @@ using UnityEngine.InputSystem;
 public class PlayerShoot : MonoBehaviour
 {
     [SerializeField]
-    private Terrain terrain;
+    private GameObject bulletPrefab;
 
     [SerializeField]
-    private GameObject bulletPrefab;
+    private PlayerMovement player;
 
     private bool shoot = false;
     
     void Start()
     {
-
     }
 
     void Update()
@@ -25,7 +24,9 @@ public class PlayerShoot : MonoBehaviour
             GameObject instance = Instantiate(bulletPrefab);
             instance.transform.position = transform.position + transform.forward;
             Bullet bullet = instance.GetComponent<Bullet>();
-            bullet.Initialize(terrain, transform.localRotation * Vector3.forward);
+            float damage = player.CalcDamage();
+            Terrain terrain = GameManager.main.GetTerrain();
+            bullet.Initialize(terrain, transform.localRotation * Vector3.forward, damage);
         }
 
         shoot = false;

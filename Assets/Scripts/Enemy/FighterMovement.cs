@@ -3,138 +3,210 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class FighterMovement : MonoBehaviour
+public class FighterMovement : MonoBehaviour, IDeinitialize
 {
     private PlayerMovement player;
     private NavMeshAgent agent;
+    private EnemyHP enemyHP;
     private float lastDestinationTime = 0f;
     private float betweenDestinationChecks = 3f;
 
     [SerializeField]
     private GameObject model;
+
     [SerializeField]
     private bool startParticles = true;
+
     [SerializeField]
-    private ParticleSystem electricityParticles;
+    private ParticleSystem leftMuzzleFlashParticles;
+
+    [SerializeField]
+    private ParticleSystem rightMuzzleFlashParticles;
+
     [SerializeField]
     private Light particleLight;
-    private float particlesOnTime = 0.35f;
-    private float particlesStartedTime = 0f;
 
+    [SerializeField]
+    private GameObject bullerPrefab;
 
-    private ProbeState state = ProbeState.Detecting;
-    private float probeStartedTime = 0f;
-    private float probingTime = 2f; // check the player out for 2s
-    private float detectStartedTime = 0f;
-    private float detectingTime = 10f; // look for player for 10s
-    private float detectNewRotationStartedTime = 0f;
-    private float detectRotationTime = 1f;
-    private Quaternion targetRotation;
+    private FighterState state = FighterState.Patrolling;
 
-    private float timeBetweenAttacks = 2f;
-    private float lastAttackTime = 0f;
+    // patrolling
+    private float randomPointRange = 20f;
+    private bool patrolling = false;
+    private Vector3 patrolTarget;
+    private float movementStalledStartTime = 0f;
+    private float timeToStayStationary = 3f;
+    private bool startedMoving = false;
+    private bool stalled = false;
 
-    private float timeAfterPlayerWentOutOfReach = 0f;
-    private float chaseTimeIfPlayerIsOutOfReach = 10f;
-    private float infiniteChaseRange = 100f; // squared
-    private bool playerOutOfReach = true;
+    // waiting
+    private float waitStarted = 0f;
+    private float waitDuration = 3f;
+
+    // attacking
+    private float rangeToStartAttack = 20f;
+    private float updateDestinationWait = 1f;
+    private float lastUpdatedDestinationTime = 0f;
+    private float attackTime = 1f;
+    private float lastAttackedTime = 0f;
+    private float attackRange = 10f;
+    private long numberOfAmmoShot = 0;
 
     void Start()
     {
-        player = FindObjectOfType<PlayerMovement>();
+        // player = FindObjectOfType<PlayerMovement>();
         agent = GetComponent<NavMeshAgent>();
-        detectStartedTime = Time.time;
+        enemyHP = GetComponent<EnemyHP>();
+    }
+
+    public void Initialize(PlayerMovement player, ObjectPool pool)
+    {
+        this.player = player;
+        enemyHP ??= GetComponent<EnemyHP>();
+        enemyHP.Initialize(pool);
+        state = FighterState.Patrolling;
+    }
+
+    public void Deinitialize()
+    {
+        agent.enabled = false;
+        state = FighterState.Patrolling;
     }
 
     void Update()
     {
-        Debug.Log(state);
-        if (state == ProbeState.Attacking)
+        if (player == null)
         {
-            if (Vector3.SqrMagnitude(player.transform.position - transform.position) > infiniteChaseRange)
-            {
-                if (!playerOutOfReach)
-                {
-                    playerOutOfReach = true;
-                    timeAfterPlayerWentOutOfReach = Time.time;
-                }
+            // wait for player ref
+            return;
+        }
 
-                if (Time.time - timeAfterPlayerWentOutOfReach > chaseTimeIfPlayerIsOutOfReach)
+        // Debug.Log($"{state}, {agent.pathStatus}, {agent.velocity.magnitude}");
+        if (state == FighterState.Attacking)
+        {
+            if (Vector2.Distance(Vec2(transform.position), Vec2(player.transform.position)) < attackRange)
+            {
+                Quaternion x = Quaternion.Euler(0, Quaternion.LookRotation(player.transform.position - transform.position, Vector3.up).eulerAngles.y, 0);
+                transform.localRotation = Quaternion.RotateTowards(transform.localRotation, x, 5f);
+
+                if (Time.time - lastAttackedTime > attackTime)
                 {
-                    state = ProbeState.Detecting;
-                    detectStartedTime = Time.time;
-                    agent.SetDestination(transform.position); // no moving during detecting
+                    GameObject bullet = Instantiate(bullerPrefab);
+                    if (numberOfAmmoShot % 2 == 0)
+                    {
+                        bullet.transform.position = leftMuzzleFlashParticles.transform.position + transform.forward * 1.5f;
+                        leftMuzzleFlashParticles.Play();
+                    }
+                    else
+                    {
+                        bullet.transform.position = rightMuzzleFlashParticles.transform.position + transform.forward * 1.5f;
+                        rightMuzzleFlashParticles.Play();
+                    }
+                    bullet.GetComponent<Bullet>().Initialize(GameManager.main.GetTerrain(), transform.forward);
+                    lastAttackedTime = Time.time;
+                    numberOfAmmoShot++;
                 }
             }
-
-            if (Time.time - lastDestinationTime > betweenDestinationChecks)
+            else
             {
-                agent.SetDestination(player.transform.position);
-            }
-
-            if (Vector3.SqrMagnitude(player.transform.position - transform.position) < 16f)
-            {
-                if (Time.time - lastAttackTime > timeBetweenAttacks)
+                if (Time.time - lastUpdatedDestinationTime > updateDestinationWait)
                 {
-                    startParticles = true;
-                    lastAttackTime = Time.time;
-                }
-
-                if (startParticles)
-                {
-                    electricityParticles.Play();
-                    particleLight.enabled = true;
-                    particlesStartedTime = Time.time;
-                    startParticles = false;
-                    // DEAL DAMAGE TO PLAYER!
+                    agent.SetDestination(player.transform.position);
+                    lastUpdatedDestinationTime = Time.time;
                 }
             }
         }
-        else if (state == ProbeState.Detecting)
+        else if (state == FighterState.Patrolling)
         {
-            if (Time.time - detectNewRotationStartedTime > detectRotationTime)
+            if (patrolling && agent.pathStatus != NavMeshPathStatus.PathComplete)
             {
-                targetRotation = Quaternion.Euler(0, Random.Range(-180, 180), 0);
-                detectNewRotationStartedTime = Time.time;
+                patrolling = false;
             }
 
-            model.transform.localRotation = Quaternion.RotateTowards(model.transform.localRotation, targetRotation, 3f);
-
-            if (Time.time - detectStartedTime > detectingTime)
+            if (!patrolling)
             {
-                state = ProbeState.Probing;
-                probeStartedTime = Time.time;
-                agent.SetDestination(transform.position); // no moving during probing
+                Vector2 unitCirclePoint = Random.insideUnitCircle.normalized * randomPointRange;
+                float h = GameManager.main.GetTerrain().SampleHeight(unitCirclePoint);
+                Vector2 dirTowardsPlayer = Vec2(player.transform.position - transform.position).normalized;
+                patrolTarget = new Vector3(unitCirclePoint.x + transform.position.x + dirTowardsPlayer.x, h, unitCirclePoint.y + transform.position.z + dirTowardsPlayer.y);
+                agent.SetDestination(patrolTarget);
+                patrolling = true;
+                startedMoving = false;
+                movementStalledStartTime = Time.time;
+                stalled = false;
+            }
+
+            if (Vector2.Distance(Vec2(patrolTarget), Vec2(transform.position)) < 1f || (!agent.pathPending && Vector2.Distance(Vec2(agent.pathEndPosition), Vec2(transform.position)) < 1f))
+            {
+                // Debug.Log($"FINISHED {Vector2.Distance(Vec2(patrolTarget), Vec2(transform.position))}, {Vector2.Distance(Vec2(agent.pathEndPosition), Vec2(transform.position))}");
+                state = FighterState.Waiting;
+                patrolling = false;
+                waitStarted = Time.time;
+                startedMoving = false;
+                stalled = false;
+                agent.SetDestination(transform.position);
+            }
+
+            // If the agent can't reach its target, wait and start again
+            if (!startedMoving && agent.velocity.magnitude > 0.05f)
+            {
+                startedMoving = true;
+            }
+
+            if (!stalled && startedMoving && agent.velocity.magnitude < 0.05f)
+            {
+                // Debug.Log("STALLED");
+                movementStalledStartTime = Time.time;
+                stalled = true;
+            }
+
+            if (stalled && (Time.time - movementStalledStartTime > timeToStayStationary))
+            {
+                state = FighterState.Waiting;
+                patrolling = false;
+                waitStarted = Time.time;
+                startedMoving = false;
+                stalled = false;
+                agent.SetDestination(transform.position);
+                // Debug.Log("POKS");
             }
         }
-        else // looking towards player
+        else
         {
-            Quaternion x = Quaternion.Euler(0, Quaternion.LookRotation(player.transform.position - transform.position, Vector3.up).eulerAngles.y, 0);
-            model.transform.localRotation = Quaternion.RotateTowards(model.transform.localRotation, x, 3f);
-            if (Time.time - probeStartedTime > probingTime)
+            if (Time.time - waitStarted > waitDuration)
             {
-                state = ProbeState.Attacking;
-            }
-
-            if (Vector3.SqrMagnitude(player.transform.position - transform.position) < infiniteChaseRange)
-            {
-                playerOutOfReach = false;
+                state = FighterState.Patrolling;
             }
         }
 
-        if (Time.time - particlesStartedTime > particlesOnTime)
+        // Debug.DrawRay(transform.position, Vec2(transform.forward), Color.green);
+        if (Vector2.Angle(Vec2(transform.forward), Vec2(player.transform.position - transform.position)) > 15)
         {
-            electricityParticles.Stop();
-            particleLight.enabled = false;
+            Debug.DrawRay(transform.position, Vec2(player.transform.position - transform.position), Color.blue);
+            if (Vector2.Distance(Vec2(transform.position), Vec2(player.transform.position)) < rangeToStartAttack)
+            {
+                state = FighterState.Attacking;
+            }
         }
+        else
+        {
+            // Debug.DrawRay(transform.position, Vec2(player.transform.position - transform.position), Color.red);
+        }
+
+        // Debug.DrawRay(patrolTarget, Vector3.up, Color.red, 20);
     }
 
+    private Vector2 Vec2(Vector3 v)
+    {
+        return new Vector2(v.x, v.z);
+    }
 
 }
 
 enum FighterState
 {
-    Detecting,
-    Probing,
+    Patrolling,
+    Waiting,
     Attacking
 }

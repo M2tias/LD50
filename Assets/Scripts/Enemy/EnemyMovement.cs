@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyMovement : MonoBehaviour
+public class EnemyMovement : MonoBehaviour, IDeinitialize
 {
     private PlayerMovement player;
     private NavMeshAgent agent;
+    private EnemyHP enemyHP;
     private float lastDestinationTime = 0f;
     private float betweenDestinationChecks = 3f;
+
+    [SerializeField]
+    private int damage;
 
     [SerializeField]
     private GameObject model;
@@ -41,14 +45,34 @@ public class EnemyMovement : MonoBehaviour
 
     void Start()
     {
-        player = FindObjectOfType<PlayerMovement>();
+        // player = FindObjectOfType<PlayerMovement>();
         agent = GetComponent<NavMeshAgent>();
         detectStartedTime = Time.time;
+        enemyHP = GetComponent<EnemyHP>();
+    }
+
+    public void Initialize(PlayerMovement player, ObjectPool pool)
+    {
+        this.player = player;
+        enemyHP ??= GetComponent<EnemyHP>();
+        enemyHP.Initialize(pool);
+    }
+
+    public void Deinitialize()
+    {
+        agent.enabled = false;
+        state = ProbeState.Detecting;
     }
 
     void Update()
     {
-        Debug.Log(state);
+        if (player == null)
+        {
+            // wait for player ref
+            return;
+        }
+
+        // Debug.Log(state);
         if (state == ProbeState.Attacking)
         {
             if (Vector3.SqrMagnitude(player.transform.position - transform.position) > infiniteChaseRange)
@@ -86,7 +110,7 @@ public class EnemyMovement : MonoBehaviour
                     particleLight.enabled = true;
                     particlesStartedTime = Time.time;
                     startParticles = false;
-                    // DEAL DAMAGE TO PLAYER!
+                    player.TakeDamage(damage);
                 }
             }
         }

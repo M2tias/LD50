@@ -3,45 +3,49 @@ Todo:
   ☐ Enable terrain collider for possible raycasts
     ☐ Set physics layers correctly for it
   ☐ Object pools
-    ☐ one for each enemy type?
+    ✔ one for each enemy type? @done(22-04-03 10:51)
     ☐ generic for loot
   ☐ Enemy
     ☐ Enemy movement logic
       ☐ Probe
         ✔ Cycle @done(22-04-02 18:46)
-          ☐ Rotate around 5s
-          ☐ Lock rotation towards player 2s
-            ☐ Infinite range
-          ☐ Move towards player
-            ☐ Infinite range, 10s
-            ☐ Within X range, infinite time
-            ☐ 75% player starting movespeed?
-          ☐ Restart cycle if distance has been X for 10 seconds
+          ✔ Rotate around 5s @done(22-04-02 19:11)
+          ✔ Lock rotation towards player 2s @done(22-04-02 19:11)
+            ✔ Infinite range @done(22-04-02 19:11)
+          ✔ Move towards player @done(22-04-02 19:11)
+            ✔ Infinite range, 10s @done(22-04-02 19:11)
+            ✔ Within X range, infinite time @done(22-04-02 19:11)
+            ✔ 75% player starting movespeed? @done(22-04-02 19:11)
+          ✔ Restart cycle if distance has been X for 10 seconds @done(22-04-02 19:11)
       ☐ Fighter
         ☐ Cycle
-          ☐ Move to a random place in X units
-            ☐ Random Vec2 and raycast from top towards the terrain
-            ☐ Check distance and angle to player
-            ☐ If player is not within Y distance and Z degree angle, restart cycle
+          ✔ Move to a random place in X units @done(22-04-02 22:01)
+            ✔ Random Vec2 and raycast from top towards the terrain @done(22-04-02 22:01)
+            ✔ Check distance and angle to player @done(22-04-02 22:01)
+            ✔ If player is not within Y distance and Z degree angle, restart cycle @done(22-04-02 22:01)
           ☐ Move towards position in front of player
             ☐ Faster than probe, not as fast as player?
-          ☐ Shoot player if in range 
+          ✔ Shoot player if in range @done(22-04-02 22:25)
     ☐ Enemy spawning
-      ☐ Spawn different amount of different units based on tier
-        ☐ Spawn close to player, range from player based on tier
-      ☐ Tiers
-        ☐ 1st tier
-          ☐ Only probes, 1 every X seconds
-        ☐ 2nd tier
-          ☐ Only probes, 3 every X seconds
-        ☐ 3rd tier
-          ☐ 3 probes, 1 fighter, every X seconds
-        ☐ 4th tier
-          ☐ 
+      ☐ Make sure no null errors or index out of range errors happening
+      ☐ Balance!
+      ☐ Visual and sound effects
+      ✔ Spawn different amount of different units based on tier @done(22-04-03 10:24)
+        ✔ Spawn close to player, range from player based on tier @done(22-04-03 10:24)
+      ✔ Tiers @done(22-04-03 10:24)
+        ✔ 1st tier @done(22-04-03 10:24)
+          ✔ Only probes, 1 every X seconds @done(22-04-03 10:24)
+        ✔ 2nd tier @done(22-04-03 10:24)
+          ✔ Only probes, 3 every X seconds @done(22-04-03 10:24)
+        ✔ 3rd tier @done(22-04-03 10:24)
+          ✔ 3 probes, 1 fighter, every X seconds @done(22-04-03 10:24)
+        ✔ 4th tier @done(22-04-03 10:24)
+          ✔ @done(22-04-03 10:24)
     ☐ Enemy attacks
       ☐ Probe
         ☐ Short range AOE, if it triggers, it damages
       ☐ Fighter
+        ☐ Shoot one bullet at a time alternating the barrel
     ☐ Death
       ☐ Back to pool
       ☐ Drop something maybe
@@ -54,7 +58,8 @@ Todo:
   ☐ Player
     ☐ Tweak movement
     ☐ Shooting
-      ☐ Kill enemies
+      ✔ Kill enemies @done(22-04-03 12:11)
+      ☐ Change things based on loot
     ☐ HP
   ☐ Loot
     ☐ Pick loot
