@@ -1,13 +1,16 @@
 
 Todo:
+  ☐ Start and end
+  ☐ TODO: test if bottle is too big still
+  ✔ Fix more current health than max health! @done(22-04-03 23:44)
   ☐ Enable terrain collider for possible raycasts
     ☐ Set physics layers correctly for it
-  ☐ Object pools
+  ✔ Object pools @done(22-04-03 21:59)
     ✔ one for each enemy type? @done(22-04-03 10:51)
-    ☐ generic for loot
+    ✔ generic for loot @done(22-04-03 21:59)
   ☐ Enemy
-    ☐ Enemy movement logic
-      ☐ Probe
+    ✔ Enemy movement logic @done(22-04-03 23:44)
+      ✔ Probe @done(22-04-03 21:59)
         ✔ Cycle @done(22-04-02 18:46)
           ✔ Rotate around 5s @done(22-04-02 19:11)
           ✔ Lock rotation towards player 2s @done(22-04-02 19:11)
@@ -17,15 +20,17 @@ Todo:
             ✔ Within X range, infinite time @done(22-04-02 19:11)
             ✔ 75% player starting movespeed? @done(22-04-02 19:11)
           ✔ Restart cycle if distance has been X for 10 seconds @done(22-04-02 19:11)
-      ☐ Fighter
-        ☐ Cycle
+      ✔ Fighter @done(22-04-03 21:59)
+        ✔ Cycle @done(22-04-03 21:59)
           ✔ Move to a random place in X units @done(22-04-02 22:01)
             ✔ Random Vec2 and raycast from top towards the terrain @done(22-04-02 22:01)
             ✔ Check distance and angle to player @done(22-04-02 22:01)
             ✔ If player is not within Y distance and Z degree angle, restart cycle @done(22-04-02 22:01)
-          ☐ Move towards position in front of player
-            ☐ Faster than probe, not as fast as player?
+          ✔ Move towards position in front of player @done(22-04-03 21:59)
+            ✔ Faster than probe, not as fast as player? @done(22-04-03 21:59)
           ✔ Shoot player if in range @done(22-04-02 22:25)
+      ✔ Big fighter @done(22-04-03 22:36)
+        ✔ Same stuff as fighter but BADDER! @done(22-04-03 22:36)
     ☐ Enemy spawning
       ☐ Make sure no null errors or index out of range errors happening
       ☐ Balance!
@@ -42,51 +47,56 @@ Todo:
         ✔ 4th tier @done(22-04-03 10:24)
           ✔ @done(22-04-03 10:24)
     ☐ Enemy attacks
-      ☐ Probe
-        ☐ Short range AOE, if it triggers, it damages
-      ☐ Fighter
-        ☐ Shoot one bullet at a time alternating the barrel
-    ☐ Death
-      ☐ Back to pool
-      ☐ Drop something maybe
+      ✔ Probe @done(22-04-03 22:36)
+        ✔ Short range AOE, if it triggers, it damages @done(22-04-03 22:36)
+      ✔ Fighter @done(22-04-03 22:36)
+        ✔ Shoot one bullet at a time alternating the barrel @done(22-04-03 22:36)
+      ✔ Big Fighter @done(22-04-03 23:44)
+        ✔ Shoot both bullets at the same time @done(22-04-03 23:44)
+    ✔ Death @done(22-04-03 23:44)
+      ✔ Back to pool @done(22-04-03 23:44)
+      ✔ Drop something maybe @done(22-04-03 23:44)
     ☐ Balance enemies
       ☐ Probe is easiest?
       ☐ Fighter tier 2?
-    ☐ Enemy models
+    ✔ Enemy models @done(22-04-03 23:44)
       ✔ Probe @done(22-04-02 16:46)
       ✔ Fighter @done(22-04-02 19:02)
   ☐ Player
     ☐ Tweak movement
-    ☐ Shooting
+    ✔ Shooting @done(22-04-04 02:05)
       ✔ Kill enemies @done(22-04-03 12:11)
-      ☐ Change things based on loot
-    ☐ HP
-  ☐ Loot
-    ☐ Pick loot
-    ☐ Spawn loot
-    ☐ Design loot graphics
-    ☐ Design loot mechanics
-      ☐ Attack speed
-      ☐ Projectile speed (might break bullet movement)
-      ☐ Movement speed
-      ☐ Crit?
-      ☐ Damage?
-      ☐ AOE damage around player?
-      ☐ Lifesteal?
-      ☐ Damage reflection?
-    ☐ Models
-  ☐ Level design
-  ☐ Materials / textures
-    ☐ Player materials
-    ☐ Enemies
-      ☐ Probe
-    ☐ Loot
+      ✔ Change things based on loot @done(22-04-03 21:58)
+    ✔ HP @done(22-04-03 21:59)
+    ☐ Death
+  ✔ Loot @done(22-04-04 02:05)
+    ✔ Pick loot @done(22-04-03 21:58)
+    ✔ Spawn loot @done(22-04-03 21:58)
+    ✔ Design loot graphics @done(22-04-03 21:58)
+    ✔ Design loot mechanics @done(22-04-03 21:58)
+      ✔ Attack speed @done(22-04-03 21:58)
+      ✔ Projectile speed (might break bullet movement) @done(22-04-03 21:58)
+      ✔ Movement speed @done(22-04-03 21:58)
+      ✔ Crit? @done(22-04-03 21:58)
+      ✔ Damage? @done(22-04-03 21:58)
+      ✔ AOE damage around player? @done(22-04-03 21:58)
+      ✔ Lifesteal? @done(22-04-03 21:58)
+      ✔ Damage reflection? @done(22-04-03 21:58)
+    ✔ Models @done(22-04-04 02:05)
+  ✔ Level design @done(22-04-03 21:58)
+  ✔ Materials / textures @done(22-04-04 02:04)
+    ✔ Player materials @done(22-04-03 21:58)
+    ✔ Enemies @done(22-04-04 02:04)
+      ✔ Probe @done(22-04-03 21:58)
+      ✔ Fighter @done(22-04-03 21:58)
+      ✔ Big fighter @done(22-04-04 02:04)
+    ✔ Loot @done(22-04-03 21:58)
   ☐ Score?
   ☐ UI
-    ☐ Show HP
+    ✔ Show HP @done(22-04-03 21:58)
     ☐ Show time
     ☐ Show score?
-    ☐ Show picked loot
+    ✔ Show picked loot @done(22-04-03 21:58)
   ☐ Visuals
     ☐ Show damage on hit
     ☐ Show effect on hit

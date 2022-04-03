@@ -38,16 +38,24 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private List<int> fightersPerTier;
+
+    [SerializeField]
+    private List<int> bigFightersPerTier;
     [SerializeField]
     private ObjectPool probePool;
     [SerializeField]
     private ObjectPool fighterPool;
     [SerializeField]
+    private ObjectPool bigFighterPool;
+    [SerializeField]
     private List<ObjectPool> objectPools;
     [SerializeField]
     private float chanceToDropLoot;
+    [SerializeField]
+    private ScoreScriptableObject scoreObject;
 
 
+    private int currentPhase = 0;
     // Tier advancement
     private int currentTier = 0;
     private float timeToAdvanceNextTierBase = 60f;
@@ -55,11 +63,15 @@ public class GameManager : MonoBehaviour
     private float lastTierAdvanceTime = 0f;
 
     // Spawning
-    private float timeBetweenSpawnsBase = 9.5f; // TODO: increase/decrease?
+    private float timeBetweenSpawnsBase = 13f; // TODO: increase/decrease?
+    private float timeBetweenSpawnsMultiplier = 0.975f;
     private float lastSpawnTime = 0f;
     private float probesLeftToSpawn = 0f;
     private float fightersLeftToSpawn = 0f;
+    private float bigFightersLeftToSpawn = 0f;
     private List<GameObject> currentSpawners;
+
+    private int killCount = 0;
 
     void Awake()
     {
@@ -74,23 +86,30 @@ public class GameManager : MonoBehaviour
     {
         lastTierAdvanceTime = Time.time;
         lastSpawnTime = Time.time - 5f;
+        scoreObject.killCount = 0;
+        scoreObject.lastPhase = 0;
+        scoreObject.lastTier = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        float timeToSpawn = timeBetweenSpawnsBase * Mathf.Pow(timeBetweenSpawnsMultiplier, currentTier);
         if (Time.time - lastSpawnTime > timeBetweenSpawnsBase)
         {
-            Debug.Log("Time to spawn!");
+            Debug.Log($"Time to spawn! {timeToSpawn}");
             Spawn();
             lastSpawnTime = Time.time;
+            currentPhase++;
         }
 
         float timeToAdvance = timeToAdvanceNextTierBase + timeToAdvanceNextTierMultiplierTime * currentTier;
+
         if (Time.time - lastTierAdvanceTime > timeToAdvance)
         {
             currentTier++;
             lastTierAdvanceTime = Time.time;
+            Debug.Log("Advanced to next tier!");
         }
     }
 
@@ -102,8 +121,9 @@ public class GameManager : MonoBehaviour
     private void Spawn()
     {
         Debug.Log("Spawning!");
-        probesLeftToSpawn = probesPerTier[currentTier];
-        fightersLeftToSpawn = fightersPerTier[currentTier];
+        probesLeftToSpawn = probesPerTier[currentPhase];
+        fightersLeftToSpawn = fightersPerTier[currentPhase];
+        bigFightersLeftToSpawn = bigFightersPerTier[currentPhase];
 
         if (currentTier <= lastFirstSpawnerTier)
         {
@@ -123,11 +143,11 @@ public class GameManager : MonoBehaviour
     private IEnumerator SpawnEnemy()
     {
         int i = 0;
-        while (probesLeftToSpawn > 0 || fightersLeftToSpawn > 0)
+        while (probesLeftToSpawn > 0 || fightersLeftToSpawn > 0 || bigFightersLeftToSpawn > 0)
         {
             Debug.Log("Spawning one!");
             GameObject spawner = currentSpawners[Random.Range(0, currentSpawners.Count)];
-            if (i % 2 == 0)
+            if (i % 3 == 0 && probesLeftToSpawn > 0)
             {
                 // Spawn probe
                 GameObject obj = probePool.ActivateObject();
@@ -140,7 +160,7 @@ public class GameManager : MonoBehaviour
                 probe.Initialize(player, probePool);
                 probesLeftToSpawn--;
             }
-            else
+            else if (i % 3 == 1 && fightersLeftToSpawn > 0)
             {
                 // Spawn fighter
                 GameObject obj = fighterPool.ActivateObject();
@@ -152,6 +172,20 @@ public class GameManager : MonoBehaviour
                 fighter.enabled = true;
                 fighter.Initialize(player, fighterPool);
                 fightersLeftToSpawn--;
+            }
+            else if (bigFightersLeftToSpawn > 0)
+            {
+                // Spawn big fighter
+                GameObject obj = bigFighterPool.ActivateObject();
+                float h = GameManager.main.GetTerrain().SampleHeight(spawner.transform.position) + 0.25f;
+                obj.transform.position = new Vector3(spawner.transform.position.x, h, spawner.transform.position.z);
+                obj.GetComponent<NavMeshAgent>().enabled = true;
+
+                BigFighterMovement bigFighter = obj.GetComponent<BigFighterMovement>();
+                bigFighter.enabled = true;
+                bigFighter.Initialize(player, bigFighterPool);
+                bigFightersLeftToSpawn--;
+
             }
             i++;
             yield return new WaitForSeconds(0.2f);
@@ -167,5 +201,29 @@ public class GameManager : MonoBehaviour
             loot.GetComponent<LootObject>().Initialize(pool);
             loot.transform.position = pos;
         }
+    }
+
+    public float GetCurrentHP()
+    {
+        return player.GetCurrentHP();
+    }
+
+    public float GetMaxHP()
+    {
+        return player.GetMaxHP();
+    }
+
+    public int GetCurrentTier()
+    {
+        return currentTier;
+    }
+    public int GetCurrentPhase()
+    {
+        return currentPhase;
+    }
+
+    public float GetTierDamageMultiplier()
+    {
+        return (0.30f * currentTier) + 1f;
     }
 }

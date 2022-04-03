@@ -52,6 +52,9 @@ public class FighterMovement : MonoBehaviour, IDeinitialize
     private float lastAttackedTime = 0f;
     private float attackRange = 10f;
     private long numberOfAmmoShot = 0;
+    private AudioSource audioSource;
+    [SerializeField]
+    private AudioSource spawnSound;
 
     void Start()
     {
@@ -66,6 +69,8 @@ public class FighterMovement : MonoBehaviour, IDeinitialize
         enemyHP ??= GetComponent<EnemyHP>();
         enemyHP.Initialize(pool);
         state = FighterState.Patrolling;
+        audioSource = GetComponent<AudioSource>();
+        spawnSound.Play();
     }
 
     public void Deinitialize()
@@ -103,9 +108,10 @@ public class FighterMovement : MonoBehaviour, IDeinitialize
                         bullet.transform.position = rightMuzzleFlashParticles.transform.position + transform.forward * 1.5f;
                         rightMuzzleFlashParticles.Play();
                     }
-                    bullet.GetComponent<Bullet>().Initialize(GameManager.main.GetTerrain(), transform.forward);
+                    bullet.GetComponent<Bullet>().Initialize(GameManager.main.GetTerrain(), transform.forward, 10 * GameManager.main.GetTierDamageMultiplier());
                     lastAttackedTime = Time.time;
                     numberOfAmmoShot++;
+                    audioSource.Play();
                 }
             }
             else

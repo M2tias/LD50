@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f0e191c325f9ea4ab896f9a5405b430, type: 3}
+  m_Name: OilCan
+  m_EditorClassIdentifier: 
+  model: {fileID: 6521296502834662091, guid: a3677df745e1c8740bbf8a2bbf36c65e, type: 3}
+  damage: 0
+  attackSpeed: 0.1
+  movementSpeed: 0
+  healHP: 0
+  maxHP: 0
+  crit: 0.05
+  lootText: Grease the wheels on those cannons! <b>10% faster attack speed</b>
+  type: 5

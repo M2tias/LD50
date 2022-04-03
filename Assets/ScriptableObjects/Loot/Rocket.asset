@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f0e191c325f9ea4ab896f9a5405b430, type: 3}
   m_Name: Rocket
   m_EditorClassIdentifier: 
-  model: {fileID: 919132149155446097, guid: 8626b4c571cf6664ca29bb8f9b1f60aa, type: 3}
+  model: {fileID: 3792788582659794628, guid: 4925491f52acccd4c90998cb13a6e5be, type: 3}
   damage: 5
   movementSpeed: 0
   healHP: 0
   maxHP: 0
   crit: 0
+  lootText: Picked up an ammo upgrade! <b>+5 damage.</b>
+  type: 2

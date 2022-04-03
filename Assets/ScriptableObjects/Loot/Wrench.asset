@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f0e191c325f9ea4ab896f9a5405b430, type: 3}
   m_Name: Wrench
   m_EditorClassIdentifier: 
-  model: {fileID: 919132149155446097, guid: e7a84df67e0366a4d8f8a2dcd61336fb, type: 3}
+  model: {fileID: 6123980413501615234, guid: 1e5d15bfc37d7814bbaed463a92a6608, type: 3}
   damage: 0
   movementSpeed: 0
   healHP: 10
   maxHP: 0
   crit: 0
+  lootText: Best time to fix your ship is now. <b>+10 HP</b>
+  type: 4

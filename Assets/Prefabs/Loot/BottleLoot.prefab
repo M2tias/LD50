@@ -46,6 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: f0d1fc59f870a304da2b2a58e5bad647, type: 2}
+  lootSoundPrefab: {fileID: 5707039025451777314, guid: e14764454b1c1a740818e2948489407e,
+    type: 3}
 --- !u!136 &8568725670687630075
 CapsuleCollider:
   m_ObjectHideFlags: 0

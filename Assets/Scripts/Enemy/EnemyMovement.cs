@@ -28,9 +28,9 @@ public class EnemyMovement : MonoBehaviour, IDeinitialize
 
     private ProbeState state = ProbeState.Detecting;
     private float probeStartedTime = 0f;
-    private float probingTime = 2f; // check the player out for 2s
+    private float probingTime = 1f; // check the player out for 2s
     private float detectStartedTime = 0f;
-    private float detectingTime = 10f; // look for player for 10s
+    private float detectingTime = 4; // look for player for 10s
     private float detectNewRotationStartedTime = 0f;
     private float detectRotationTime = 1f;
     private Quaternion targetRotation;
@@ -40,8 +40,11 @@ public class EnemyMovement : MonoBehaviour, IDeinitialize
 
     private float timeAfterPlayerWentOutOfReach = 0f;
     private float chaseTimeIfPlayerIsOutOfReach = 10f;
-    private float infiniteChaseRange = 100f; // squared
+    private float infiniteChaseRange = 300f; // out of reach range, squared
     private bool playerOutOfReach = true;
+    private AudioSource audio;
+    [SerializeField]
+    private AudioSource spawnSound;
 
     void Start()
     {
@@ -56,6 +59,8 @@ public class EnemyMovement : MonoBehaviour, IDeinitialize
         this.player = player;
         enemyHP ??= GetComponent<EnemyHP>();
         enemyHP.Initialize(pool);
+        audio = GetComponent<AudioSource>();
+        spawnSound.Play();
     }
 
     public void Deinitialize()
@@ -110,7 +115,8 @@ public class EnemyMovement : MonoBehaviour, IDeinitialize
                     particleLight.enabled = true;
                     particlesStartedTime = Time.time;
                     startParticles = false;
-                    player.TakeDamage(damage);
+                    player.TakeDamage(damage * GameManager.main.GetTierDamageMultiplier());
+                    audio.Play();
                 }
             }
         }

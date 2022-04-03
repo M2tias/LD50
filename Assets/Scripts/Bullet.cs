@@ -30,6 +30,7 @@ public class Bullet : MonoBehaviour
             this.damage = damage.Value;
         }
         this.dir = dir;
+        transform.localRotation = Quaternion.LookRotation(dir);
         this.terrain = terrain;
         timeStarted = Time.time;
         initialized = true;
@@ -44,6 +45,11 @@ public class Bullet : MonoBehaviour
         transform.localPosition = new Vector3(tp.x, h, tp.z);
 
         body.velocity = new Vector3(dir.x, 0, dir.z) * speed + new Vector3(0, verticalSpeed, 0);
+
+        if (Time.time - timeStarted > lifeTime)
+        {
+            Destroy(gameObject);
+        }
 
     }
 

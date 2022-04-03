@@ -13,6 +13,8 @@ public class LootObject : MonoBehaviour, IDeinitialize
 
     [SerializeField]
     private LootConfig config;
+    [SerializeField]
+    private GameObject lootSoundPrefab;
 
     private GameObject model;
     private ObjectPool pool;
@@ -49,5 +51,10 @@ public class LootObject : MonoBehaviour, IDeinitialize
     public ObjectPool GetPool()
     {
         return pool;
+    }
+
+    public void Pickup()
+    {
+        Instantiate(lootSoundPrefab).transform.parent = null;
     }
 }
