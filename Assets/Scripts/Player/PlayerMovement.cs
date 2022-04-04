@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -26,11 +27,14 @@ public class PlayerMovement : MonoBehaviour
     private float maxHP;
     private float currentHP;
 
-    private float damage = 6;
+    private float damage = 8;
     private float critMultiplier = 2f;
     private float critChance = 0.05f;
 
     private float timeBetweenAttacks = 1f;
+    private float timeBeforeEnd = 1.5f;
+    private float endStartedTime;
+    private bool dead = false;
 
     private AudioSource audio;
 
@@ -46,7 +50,6 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         float h = terrain.SampleHeight(new Vector3(transform.position.x, 0, transform.position.z));
-        // Debug.Log(h);
         Debug.DrawLine(new Vector3(transform.position.x, 100, transform.position.z), new Vector3(transform.position.x, h, transform.position.z), Color.red);
         Debug.DrawLine(new Vector3(transform.position.x, 100, transform.position.z), new Vector3(transform.position.x + 0.1f, transform.position.y, transform.position.z + 0.1f), Color.blue);
     }
@@ -75,12 +78,17 @@ public class PlayerMovement : MonoBehaviour
         body.velocity = new Vector3(vel2.x, 0, vel2.y) * speed;
         // float h = terrain.SampleHeight(new Vector3(transform.position.x, 0, transform.position.z));
         // transform.position = new Vector3(transform.position.x, h, transform.position.z);
+
+        if (dead && Time.time - endStartedTime > timeBeforeEnd)
+        {
+            Debug.Log("DEAD");
+            SceneManager.LoadScene(1);
+        }
     }
 
     void OnMove(InputValue value)
     {
         moveAxis = value.Get<Vector2>();
-        // Debug.Log(moveAxis);
     }
 
     void OnTriggerEnter(Collider collider)
@@ -89,7 +97,6 @@ public class PlayerMovement : MonoBehaviour
         {
             Bullet bullet = collider.gameObject.GetComponent<Bullet>();
             TakeDamage(bullet.GetDamage());
-            Debug.Log($"Took damage {bullet.GetDamage()} now have {currentHP} hp.");
             Destroy(bullet.gameObject);
         }
         else if (collider.CompareTag("Loot"))
@@ -109,8 +116,13 @@ public class PlayerMovement : MonoBehaviour
     {
         currentHP -= amount;
         UIManager.main.UpdateHP();
-        Debug.Log($"Took damage {amount} now have {currentHP} hp.");
         audio.Play();
+        if (currentHP <= 0)
+        {
+            Debug.Log("SOON DEAD");
+            endStartedTime = Time.time;
+            dead = true;
+        }
     }
 
     private void Upgrade(LootConfig config)

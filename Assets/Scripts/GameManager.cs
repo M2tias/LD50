@@ -97,7 +97,6 @@ public class GameManager : MonoBehaviour
         float timeToSpawn = timeBetweenSpawnsBase * Mathf.Pow(timeBetweenSpawnsMultiplier, currentTier);
         if (Time.time - lastSpawnTime > timeBetweenSpawnsBase)
         {
-            Debug.Log($"Time to spawn! {timeToSpawn}");
             Spawn();
             lastSpawnTime = Time.time;
             currentPhase++;
@@ -109,8 +108,11 @@ public class GameManager : MonoBehaviour
         {
             currentTier++;
             lastTierAdvanceTime = Time.time;
-            Debug.Log("Advanced to next tier!");
         }
+
+        scoreObject.killCount = killCount;
+        scoreObject.lastPhase = currentPhase;
+        scoreObject.lastTier = currentTier;
     }
 
     public Terrain GetTerrain()
@@ -120,7 +122,6 @@ public class GameManager : MonoBehaviour
 
     private void Spawn()
     {
-        Debug.Log("Spawning!");
         probesLeftToSpawn = probesPerTier[currentPhase];
         fightersLeftToSpawn = fightersPerTier[currentPhase];
         bigFightersLeftToSpawn = bigFightersPerTier[currentPhase];
@@ -145,7 +146,6 @@ public class GameManager : MonoBehaviour
         int i = 0;
         while (probesLeftToSpawn > 0 || fightersLeftToSpawn > 0 || bigFightersLeftToSpawn > 0)
         {
-            Debug.Log("Spawning one!");
             GameObject spawner = currentSpawners[Random.Range(0, currentSpawners.Count)];
             if (i % 3 == 0 && probesLeftToSpawn > 0)
             {
@@ -201,6 +201,11 @@ public class GameManager : MonoBehaviour
             loot.GetComponent<LootObject>().Initialize(pool);
             loot.transform.position = pos;
         }
+    }
+
+    public void EnemyKilled()
+    {
+        killCount++;
     }
 
     public float GetCurrentHP()

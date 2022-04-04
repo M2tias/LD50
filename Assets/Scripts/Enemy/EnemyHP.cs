@@ -27,6 +27,7 @@ public class EnemyHP : MonoBehaviour
 
         if (currentHP <= 0)
         {
+            GameManager.main.EnemyKilled();
             GameManager.main.DropLoot(transform.position);
             pool.DeactivateObject(gameObject);
         }
@@ -38,7 +39,6 @@ public class EnemyHP : MonoBehaviour
         {
             Bullet bullet = collider.gameObject.GetComponent<Bullet>();
             currentHP -= bullet.GetDamage();
-            Debug.Log($"Took damage {bullet.GetDamage()} now have {currentHP} hp.");
             Destroy(bullet.gameObject);
         }
     }

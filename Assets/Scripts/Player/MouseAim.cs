@@ -20,6 +20,5 @@ public class MouseAim : MonoBehaviour
     {
         worldPos = mainCam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         transform.position = new Vector3(worldPos.x, 1f, worldPos.z);
-        Debug.Log(worldPos);
     }
 }

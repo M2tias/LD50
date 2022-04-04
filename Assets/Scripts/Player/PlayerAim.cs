@@ -35,7 +35,6 @@ public class PlayerAim : MonoBehaviour
         if (Physics.Raycast(Camera.main.ScreenPointToRay(mousePos), out hit, 100f, aimTarget))
         {
             aimIndicator.transform.position = hit.point;
-            // Debug.Log(hit.point);
         }
         transform.localRotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y + mousePos.x * rotationSpeed * Time.deltaTime, 0);
 

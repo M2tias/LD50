@@ -86,7 +86,6 @@ public class BigFighterMovement : MonoBehaviour, IDeinitialize
             return;
         }
 
-        // Debug.Log($"{state}, {agent.pathStatus}, {agent.velocity.magnitude}");
         if (state == FighterState.Attacking)
         {
             if (Vector2.Distance(Vec2(transform.position), Vec2(player.transform.position)) < attackRange)
@@ -140,7 +139,6 @@ public class BigFighterMovement : MonoBehaviour, IDeinitialize
 
             if (Vector2.Distance(Vec2(patrolTarget), Vec2(transform.position)) < 1f || (!agent.pathPending && Vector2.Distance(Vec2(agent.pathEndPosition), Vec2(transform.position)) < 1f))
             {
-                // Debug.Log($"FINISHED {Vector2.Distance(Vec2(patrolTarget), Vec2(transform.position))}, {Vector2.Distance(Vec2(agent.pathEndPosition), Vec2(transform.position))}");
                 state = FighterState.Waiting;
                 patrolling = false;
                 waitStarted = Time.time;
@@ -157,7 +155,6 @@ public class BigFighterMovement : MonoBehaviour, IDeinitialize
 
             if (!stalled && startedMoving && agent.velocity.magnitude < 0.05f)
             {
-                // Debug.Log("STALLED");
                 movementStalledStartTime = Time.time;
                 stalled = true;
             }
@@ -170,7 +167,6 @@ public class BigFighterMovement : MonoBehaviour, IDeinitialize
                 startedMoving = false;
                 stalled = false;
                 agent.SetDestination(transform.position);
-                // Debug.Log("POKS");
             }
         }
         else
@@ -181,10 +177,8 @@ public class BigFighterMovement : MonoBehaviour, IDeinitialize
             }
         }
 
-        // Debug.DrawRay(transform.position, Vec2(transform.forward), Color.green);
         if (Vector2.Angle(Vec2(transform.forward), Vec2(player.transform.position - transform.position)) > 15)
         {
-            Debug.DrawRay(transform.position, Vec2(player.transform.position - transform.position), Color.blue);
             if (Vector2.Distance(Vec2(transform.position), Vec2(player.transform.position)) < rangeToStartAttack)
             {
                 state = FighterState.Attacking;
@@ -192,10 +186,7 @@ public class BigFighterMovement : MonoBehaviour, IDeinitialize
         }
         else
         {
-            // Debug.DrawRay(transform.position, Vec2(player.transform.position - transform.position), Color.red);
         }
-
-        // Debug.DrawRay(patrolTarget, Vector3.up, Color.red, 20);
     }
 
     private Vector2 Vec2(Vector3 v)

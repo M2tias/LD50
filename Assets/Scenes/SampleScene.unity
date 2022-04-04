@@ -11181,7 +11181,7 @@ MonoBehaviour:
   - {fileID: 1507004047}
   - {fileID: 20472566}
   - {fileID: 2074349416}
-  chanceToDropLoot: 0.45
+  chanceToDropLoot: 0.52
   scoreObject: {fileID: 11400000, guid: e301d1d8dd4e62443bd037029ac1c8a6, type: 2}
 --- !u!4 &1945355824
 Transform:

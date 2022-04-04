@@ -77,7 +77,6 @@ public class EnemyMovement : MonoBehaviour, IDeinitialize
             return;
         }
 
-        // Debug.Log(state);
         if (state == ProbeState.Attacking)
         {
             if (Vector3.SqrMagnitude(player.transform.position - transform.position) > infiniteChaseRange)
