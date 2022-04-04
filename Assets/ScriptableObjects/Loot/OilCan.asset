@@ -18,6 +18,6 @@ MonoBehaviour:
   movementSpeed: 0
   healHP: 0
   maxHP: 0
-  crit: 0.05
+  crit: 0
   lootText: Grease the wheels on those cannons! <b>10% faster attack speed</b>
   type: 5

@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   model: {fileID: 6521296502834662091, guid: 3171823147a318441b20334242757ee0, type: 3}
   damage: 0
+  attackSpeed: 0
   movementSpeed: 0
   healHP: 0
   maxHP: 0
-  crit: 0.05
-  lootText: Telescope helps you notice weaknesses better! <b>+5% critical hit chance</b>
+  crit: 0.035
+  lootText: Telescope helps you notice weaknesses better! <b>+3.5% critical hit chance</b>
   type: 3

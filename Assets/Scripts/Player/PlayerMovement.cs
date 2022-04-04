@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
     private float maxHP;
     private float currentHP;
 
-    private float damage = 8;
+    private float damage = 9;
     private float critMultiplier = 2f;
     private float critChance = 0.05f;
 
@@ -127,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Upgrade(LootConfig config)
     {
-        speed = Mathf.Min(speed + config.movementSpeed, 23);
+        speed = Mathf.Min(speed + config.movementSpeed, 18);
         damage += config.damage;
         timeBetweenAttacks = timeBetweenAttacks * (1 - config.attackSpeed);
         critChance += config.crit;
